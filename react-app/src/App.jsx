@@ -52,16 +52,18 @@ const pages = [
 
 export default function App() {
   const audioRef = useRef(null)
+  const audioStartedRef = useRef(false)
 
   useEffect(() => {
     // Try to play audio automatically from 31 seconds
     const playAudio = async () => {
-      if (audioRef.current) {
+      if (audioRef.current && !audioStartedRef.current) {
         try {
           audioRef.current.currentTime = 31 // Start from 31 seconds
           await audioRef.current.play()
+          audioStartedRef.current = true
         } catch (err) {
-          // Autoplay blocked by browser; will play once user interacts
+          // Autoplay blocked by browser; will play on first user interaction
           console.warn('Autoplay blocked:', err.message)
         }
       }
@@ -69,6 +71,19 @@ export default function App() {
     
     playAudio()
   }, [])
+
+  // Play audio on first user interaction (click, touch, etc.)
+  const handleUserInteraction = async () => {
+    if (audioRef.current && !audioStartedRef.current) {
+      try {
+        audioRef.current.currentTime = 31
+        await audioRef.current.play()
+        audioStartedRef.current = true
+      } catch (err) {
+        console.error('Failed to play audio:', err)
+      }
+    }
+  }
 
   const handleAudioEnd = () => {
     if (audioRef.current) {
@@ -120,7 +135,7 @@ export default function App() {
   }, [])
 
   return (
-    <div className="app-root">
+    <div className="app-root" onClick={handleUserInteraction} style={{ cursor: 'grab' }}>
       <audio ref={audioRef} loop onEnded={handleAudioEnd} volume={0.3} style={{ display: 'none' }}>
         <source src="/Rakhlo Tum Chupaake.mp3" type="audio/mpeg" />
         Your browser does not support the audio element.
