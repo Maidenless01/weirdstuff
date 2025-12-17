@@ -135,7 +135,7 @@ export default function App() {
   }, [])
 
   return (
-    <div className="app-root" onClick={handleUserInteraction} style={{ cursor: 'grab' }}>
+    <div className="app-root" onClick={handleUserInteraction} onTouchStart={handleUserInteraction} style={{ cursor: 'grab' }}>
       <audio ref={audioRef} loop onEnded={handleAudioEnd} volume={0.3} style={{ display: 'none' }}>
         <source src="/Rakhlo Tum Chupaake.mp3" type="audio/mpeg" />
         Your browser does not support the audio element.
