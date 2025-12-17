@@ -1,19 +1,24 @@
 # Drag Papers (Mobile + Desktop)
 
-This page lets you drag cute "papers" around. It now works on both desktop (mouse) and mobile (touch) with responsive styles.
+This page lets you drag cute "papers" around. It now works on both desktop and mobile using unified Pointer Events with responsive styles.
 
 What changed:
 - Mobile-friendly viewport added
 - Responsive font/image sizes
-- Touch dragging enabled via `mobile.js`
-- Desktop dragging guarded in `script.js` to avoid conflicts on touch devices
+- Unified drag via `drag.js` (Pointer Events)
 
 Usage:
 1. Open `index.html` in a browser.
-2. On phones/tablets, touch and drag the papers/images.
-3. On desktop, use the mouse to drag.
+2. Drag papers/images with touch (mobile) or mouse (desktop).
 
 Note: The local images referenced (`images/1.jpeg`, `images/2.jpeg`, `images/3.jpg`) should exist; otherwise replace with your own.
+
+Technical notes:
+- Papers are randomly placed within the viewport on load to be easier to tap on mobile.
+- CSS sets `touch-action: none` to enable custom dragging without scroll interference.
+
+Cleanup:
+- Removed legacy scripts [script.js](script.js) and [mobile.js](mobile.js); [drag.js](drag.js) now handles all input.
 
 Thanks and Happy Coding.
 
