@@ -59,6 +59,7 @@ export default function App() {
     const playAudio = async () => {
       if (audioRef.current) {
         try {
+          audioRef.current.currentTime = 31 // Start from 31 seconds
           await audioRef.current.play()
           setMusicPermission(true)
         } catch (err) {
@@ -74,11 +75,19 @@ export default function App() {
   const handlePlayMusic = async () => {
     if (audioRef.current) {
       try {
+        audioRef.current.currentTime = 31 // Start from 31 seconds
         await audioRef.current.play()
         setMusicPermission(true)
       } catch (err) {
         console.error('Failed to play audio:', err)
       }
+    }
+  }
+
+  // Reset audio to 31 seconds when it ends (for loop)
+  const handleAudioEnd = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = 31
     }
   }
 
@@ -127,7 +136,7 @@ export default function App() {
 
   return (
     <div className="app-root">
-      <audio ref={audioRef} loop volume={0.3} style={{ display: 'none' }}>
+      <audio ref={audioRef} loop onEnded={handleAudioEnd} volume={0.3} style={{ display: 'none' }}>
         <source src="/Rakhlo Tum Chupaake.mp3" type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
