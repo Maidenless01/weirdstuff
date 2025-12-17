@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef, useEffect, useState } from 'react'
 import Paper from './components/Paper.jsx'
 
 const pages = [
@@ -51,6 +51,37 @@ const pages = [
 ]
 
 export default function App() {
+  const audioRef = useRef(null)
+  const [musicPermission, setMusicPermission] = useState(false)
+
+  useEffect(() => {
+    // Try to play audio; if it fails due to autoplay policy, show permission prompt
+    const playAudio = async () => {
+      if (audioRef.current) {
+        try {
+          await audioRef.current.play()
+          setMusicPermission(true)
+        } catch (err) {
+          // Autoplay blocked; user needs to interact first
+          setMusicPermission(false)
+        }
+      }
+    }
+    
+    playAudio()
+  }, [])
+
+  const handlePlayMusic = async () => {
+    if (audioRef.current) {
+      try {
+        await audioRef.current.play()
+        setMusicPermission(true)
+      } catch (err) {
+        console.error('Failed to play audio:', err)
+      }
+    }
+  }
+
   const layout = useMemo(() => {
     const vw = typeof window !== 'undefined' ? window.innerWidth : 800
     const vh = typeof window !== 'undefined' ? window.innerHeight : 600
@@ -96,6 +127,32 @@ export default function App() {
 
   return (
     <div className="app-root">
+      <audio ref={audioRef} loop volume={0.3} style={{ display: 'none' }}>
+        <source src="/Rakhlo Tum Chupaake.mp3" type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
+      
+      {!musicPermission && (
+        <button
+          onClick={handlePlayMusic}
+          style={{
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            padding: '10px 20px',
+            fontSize: '16px',
+            backgroundColor: '#ff69b4',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            zIndex: 1000,
+          }}
+        >
+          🎵 Play Music
+        </button>
+      )}
+      
       {pages.map((page, idx) => (
         <Paper
           key={page.title}
