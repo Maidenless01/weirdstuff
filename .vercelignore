@@ -1,0 +1,3 @@
+# Ignore non-essential files from deployment
+README.md
+images/test.txt

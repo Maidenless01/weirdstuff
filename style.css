@@ -25,6 +25,9 @@ body {
   box-shadow: 1px 15px 20px 0px rgba(0,0,0,0.5);
   
   position: absolute;
+  touch-action: none; /* allow custom touch drag */
+  cursor: grab;
+  will-change: transform;
 }
 
 .paper.heart {
@@ -70,4 +73,35 @@ p {
   user-select: none;
   
   // filter: drop-shadow(2px 1.5px 1px rgba(0,0,105,0.9));
+}
+
+/* Desktop active state */
+.paper:active {
+  cursor: grabbing;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 600px) {
+  body {
+    background-size: 600px;
+  }
+  .paper {
+    padding: 16px 24px;
+    background-size: 300px;
+    transform: rotateZ(-3deg);
+  }
+  .paper.heart {
+    width: 140px;
+    height: 140px;
+    background-size: 120px;
+  }
+  .paper.image p {
+    font-size: 20px;
+  }
+  p {
+    font-size: 28px;
+  }
+  img {
+    max-height: 160px;
+  }
 }
