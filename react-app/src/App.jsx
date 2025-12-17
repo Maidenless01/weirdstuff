@@ -4,7 +4,7 @@ import Paper from './components/Paper.jsx'
 const pages = [
   {
     title: 'Page 3',
-    lines: ['Happy Birthday, My Love 🎂❤️'],
+    lines: ['Happy Birthday, baby 🎂❤️'],
   },
   {
     title: 'Page 4',
@@ -42,7 +42,7 @@ const pages = [
   },
   {
     title: 'Page 8',
-    lines: ['Happy Birthday, baby 💕'],
+    lines: ['Happy Birthday, Dr. Sarah 💕'],
   },
   {
     title: 'Page 9',
