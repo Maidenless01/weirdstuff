@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useEffect, useState } from 'react'
+import React, { useMemo, useRef, useEffect } from 'react'
 import Paper from './components/Paper.jsx'
 
 const pages = [
@@ -52,19 +52,17 @@ const pages = [
 
 export default function App() {
   const audioRef = useRef(null)
-  const [musicPermission, setMusicPermission] = useState(false)
 
   useEffect(() => {
-    // Try to play audio; if it fails due to autoplay policy, show permission prompt
+    // Try to play audio automatically from 31 seconds
     const playAudio = async () => {
       if (audioRef.current) {
         try {
           audioRef.current.currentTime = 31 // Start from 31 seconds
           await audioRef.current.play()
-          setMusicPermission(true)
         } catch (err) {
-          // Autoplay blocked; user needs to interact first
-          setMusicPermission(false)
+          // Autoplay blocked by browser; will play once user interacts
+          console.warn('Autoplay blocked:', err.message)
         }
       }
     }
@@ -72,19 +70,6 @@ export default function App() {
     playAudio()
   }, [])
 
-  const handlePlayMusic = async () => {
-    if (audioRef.current) {
-      try {
-        audioRef.current.currentTime = 31 // Start from 31 seconds
-        await audioRef.current.play()
-        setMusicPermission(true)
-      } catch (err) {
-        console.error('Failed to play audio:', err)
-      }
-    }
-  }
-
-  // Reset audio to 31 seconds when it ends (for loop)
   const handleAudioEnd = () => {
     if (audioRef.current) {
       audioRef.current.currentTime = 31
@@ -140,27 +125,6 @@ export default function App() {
         <source src="/Rakhlo Tum Chupaake.mp3" type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
-      
-      {!musicPermission && (
-        <button
-          onClick={handlePlayMusic}
-          style={{
-            position: 'fixed',
-            top: '20px',
-            right: '20px',
-            padding: '10px 20px',
-            fontSize: '16px',
-            backgroundColor: '#ff69b4',
-            color: 'white',
-            border: 'none',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            zIndex: 1000,
-          }}
-        >
-          🎵 Play Music
-        </button>
-      )}
       
       {pages.map((page, idx) => (
         <Paper
