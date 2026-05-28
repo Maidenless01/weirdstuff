@@ -14,9 +14,9 @@ const pages = [
   {
     title: 'Page 4',
     lines: [
-      'Every day with you is better than the last.',
-      'You’ve brought so much joy, color,',
-      'and meaning into my life.',
+      'I feel the need to be with you.',
+      'I\' cherish you and I\' miss you every day.',
+      'I love you and I\' always will.',
     ],
   },
   {
@@ -27,9 +27,9 @@ const pages = [
   {
     title: 'Page 5',
     lines: [
-      'My life was so colorless before I met you.',
+      'You bring back what I loved most in my life.',
       'It’s like you came into my dreariness',
-      'and colored it with your love.',
+      'and made it all worth it.',
       'The thought of spending a lifetime with you',
       'seems so perfect!',
     ],
@@ -42,8 +42,8 @@ const pages = [
   {
     title: 'Page 6',
     lines: [
-      'From the moment I met you,',
-      'I knew there was something special about you.',
+      'The day when we had our first kiss.',
+      'I was not able to sleep without you being in my arms.',
       'You make my heart feel at home.',
     ],
   },
@@ -61,7 +61,7 @@ const pages = [
   },
   {
     title: 'Page 8',
-    lines: ['Happy Birthday, Dr. Sarah 💕'],
+    lines: ['Happy Birthday, Chunmun 💕'],
   },
    {
     title: 'Photo 5',
