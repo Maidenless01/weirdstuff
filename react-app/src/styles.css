@@ -50,7 +50,7 @@ body {
 .paper.image p { font-size: 30px; }
 
 img {
-  max-height: 200px;
+  max-height: 280px;
   width: 100%;
   user-select: none;
 }
@@ -70,7 +70,7 @@ p {
   .paper.image p { font-size: 18px; }
   .paper.image { padding: 8px; }
   p { font-size: 24px; }
-  img { max-height: 120px; }
+  img { max-height: 170px; }
 }
 
 @media (min-width: 641px) and (max-width: 1023px) {
@@ -79,7 +79,7 @@ p {
   .paper.heart { width: 160px; height: 160px; }
   .paper.image p { font-size: 24px; }
   p { font-size: 36px; }
-  img { max-height: 180px; }
+  img { max-height: 240px; }
 }
 
 @media (min-width: 1024px) {
@@ -87,5 +87,5 @@ p {
   .paper.heart { width: 200px; height: 200px; }
   .paper.image p { font-size: 30px; }
   p { font-size: 50px; }
-  img { max-height: 200px; }
+  img { max-height: 320px; }
 }

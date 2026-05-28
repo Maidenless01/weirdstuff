@@ -2,9 +2,14 @@ import React, { useMemo, useRef, useEffect } from 'react'
 import Paper from './components/Paper.jsx'
 
 const pages = [
+  
   {
     title: 'Page 3',
     lines: ['Happy Birthday, baby 🎂❤️'],
+  },
+  {
+    title: 'Photo 1',
+    image: '/images/IMG-20260516-WA0008.jpg',
   },
   {
     title: 'Page 4',
@@ -14,6 +19,11 @@ const pages = [
       'and meaning into my life.',
     ],
   },
+  {
+    title: 'Photo 2',
+    image: '/images/IMG-20260516-WA0012.jpg',
+  },
+  
   {
     title: 'Page 5',
     lines: [
@@ -25,12 +35,21 @@ const pages = [
     ],
   },
   {
+    title: 'Photo 4',
+    image: '/images/IMG-20260516-WA0020.jpg',
+  },
+ 
+  {
     title: 'Page 6',
     lines: [
       'From the moment I met you,',
       'I knew there was something special about you.',
       'You make my heart feel at home.',
     ],
+  },
+  {
+    title: 'Photo 3',
+    image: '/images/IMG-20260516-WA0017.jpg',
   },
   {
     title: 'Page 7',
@@ -44,10 +63,16 @@ const pages = [
     title: 'Page 8',
     lines: ['Happy Birthday, Dr. Sarah 💕'],
   },
+   {
+    title: 'Photo 5',
+    image: '/images/IMG-20260516-WA0030.jpg',
+  },
   {
     title: 'Page 9',
     lines: ['Drag the papers to move!'],
-  },
+  }
+  
+  
 ]
 
 export default function App() {
@@ -144,15 +169,19 @@ export default function App() {
       {pages.map((page, idx) => (
         <Paper
           key={page.title}
-          className="paper"
+          className={page.image ? 'paper image' : 'paper'}
           aria-label={page.title}
           initialX={layout[idx].x}
           initialY={layout[idx].y}
           initialRotation={layout[idx].rot}
         >
-          {page.lines.map((line, i) => (
-            <p key={i} className="p1">{line}</p>
-          ))}
+          {page.image ? (
+            <img src={page.image} alt={page.title} draggable={false} />
+          ) : (
+            page.lines.map((line, i) => (
+              <p key={i} className="p1">{line}</p>
+            ))
+          )}
         </Paper>
       ))}
     </div>
