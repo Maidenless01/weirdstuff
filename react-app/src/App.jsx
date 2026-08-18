@@ -1,11 +1,13 @@
 import React, { useMemo, useRef, useEffect } from 'react'
 import Paper from './components/Paper.jsx'
+import SecretPage from './components/SecretPage.jsx'
+import LettersMatrix from './components/LettersMatrix.jsx'
 
 const pages = [
-  
   {
     title: 'Page 3',
     lines: ['Happy Birthday, baby 🎂❤️'],
+    hasShakeButton: true,
   },
   {
     title: 'Photo 1',
@@ -23,7 +25,6 @@ const pages = [
     title: 'Photo 2',
     image: '/images/IMG-20260516-WA0012.jpg',
   },
-  
   {
     title: 'Page 5',
     lines: [
@@ -38,7 +39,6 @@ const pages = [
     title: 'Photo 4',
     image: '/images/IMG-20260516-WA0020.jpg',
   },
- 
   {
     title: 'Page 6',
     lines: [
@@ -63,7 +63,7 @@ const pages = [
     title: 'Page 8',
     lines: ['Happy Birthday, Chunmun 💕'],
   },
-   {
+  {
     title: 'Photo 5',
     image: '/images/IMG-20260516-WA0030.jpg',
   },
@@ -71,19 +71,20 @@ const pages = [
     title: 'Page 9',
     lines: ['Drag the papers to move!'],
   }
-  
-  
 ]
 
 export default function App() {
   const audioRef = useRef(null)
   const audioStartedRef = useRef(false)
+  const [isShaking, setIsShaking] = React.useState(false)
+  const [currentView, setCurrentView] = React.useState('papers') // 'papers' | 'secret' | 'letters'
 
   useEffect(() => {
     // Try to play audio automatically from 31 seconds
     const playAudio = async () => {
       if (audioRef.current && !audioStartedRef.current) {
         try {
+          audioRef.current.volume = 0.05 // Lower volume to 5%
           audioRef.current.currentTime = 31 // Start from 31 seconds
           await audioRef.current.play()
           audioStartedRef.current = true
@@ -101,6 +102,7 @@ export default function App() {
   const handleUserInteraction = async () => {
     if (audioRef.current && !audioStartedRef.current) {
       try {
+        audioRef.current.volume = 0.05 // Lower volume to 5%
         audioRef.current.currentTime = 31
         await audioRef.current.play()
         audioStartedRef.current = true
@@ -113,6 +115,26 @@ export default function App() {
   const handleAudioEnd = () => {
     if (audioRef.current) {
       audioRef.current.currentTime = 31
+    }
+  }
+
+  const handleLetterOpen = () => {
+    if (audioRef.current) {
+      audioRef.current.pause()
+    }
+  }
+
+  const handleLetterClose = () => {
+    if (audioRef.current && audioStartedRef.current) {
+      audioRef.current.play().catch(err => console.log('Failed to resume background music:', err))
+    }
+  }
+
+  const handleViewChange = (view) => {
+    setCurrentView(view)
+    // Make sure background music plays if returning to views without open letters
+    if (audioRef.current && audioStartedRef.current) {
+      audioRef.current.play().catch(err => console.log('Failed to resume background music:', err))
     }
   }
 
@@ -160,30 +182,81 @@ export default function App() {
   }, [])
 
   return (
-    <div className="app-root" onClick={handleUserInteraction} onTouchStart={handleUserInteraction} style={{ cursor: 'grab' }}>
-      <audio ref={audioRef} loop onEnded={handleAudioEnd} volume={0.3} style={{ display: 'none' }}>
+    <div className={`app-root ${isShaking ? 'shake-all' : ''}`} onClick={handleUserInteraction} onTouchStart={handleUserInteraction} style={{ cursor: 'grab' }}>
+      <audio ref={audioRef} loop onEnded={handleAudioEnd} volume={0.05} style={{ display: 'none' }}>
         <source src="/Rakhlo Tum Chupaake.mp3" type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
-      
-      {pages.map((page, idx) => (
-        <Paper
-          key={page.title}
-          className={page.image ? 'paper image' : 'paper'}
-          aria-label={page.title}
-          initialX={layout[idx].x}
-          initialY={layout[idx].y}
-          initialRotation={layout[idx].rot}
+
+      {/* Floating Navigation Menu */}
+      <nav className="floating-navbar" onPointerDown={(e) => e.stopPropagation()}>
+        <button 
+          className={`nav-item ${currentView === 'papers' ? 'active' : ''}`}
+          onClick={() => handleViewChange('papers')}
+          title="Draggable Notes"
         >
-          {page.image ? (
-            <img src={page.image} alt={page.title} draggable={false} />
-          ) : (
-            page.lines.map((line, i) => (
-              <p key={i} className="p1">{line}</p>
-            ))
-          )}
-        </Paper>
-      ))}
+          <span className="nav-icon">📑</span>
+          <span className="nav-text">Memories</span>
+        </button>
+        <button 
+          className={`nav-item ${currentView === 'letters' ? 'active' : ''}`}
+          onClick={() => handleViewChange('letters')}
+          title="22 Love Letters"
+        >
+          <span className="nav-icon">✉️</span>
+          <span className="nav-text">Letters</span>
+        </button>
+        <button 
+          className={`nav-item ${currentView === 'secret' ? 'active' : ''}`}
+          onClick={() => handleViewChange('secret')}
+          title="Endless Garden"
+        >
+          <span className="nav-icon">💖</span>
+          <span className="nav-text">Garden</span>
+        </button>
+      </nav>
+      
+      {currentView === 'secret' ? (
+        <SecretPage onBack={() => handleViewChange('papers')} />
+      ) : currentView === 'letters' ? (
+        <LettersMatrix onLetterOpen={handleLetterOpen} onLetterClose={handleLetterClose} />
+      ) : (
+        pages.map((page, idx) => (
+          <Paper
+            key={page.title}
+            className={page.image ? 'paper image' : 'paper'}
+            aria-label={page.title}
+            initialX={layout[idx].x}
+            initialY={layout[idx].y}
+            initialRotation={layout[idx].rot}
+          >
+            {page.image ? (
+              <img src={page.image} alt={page.title} draggable={false} />
+            ) : (
+              page.lines.map((line, i) => (
+                <p key={i} className="p1">{line}</p>
+              ))
+            )}
+            {page.hasShakeButton && (
+              <button 
+                className="shake-button"
+                onPointerDown={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setIsShaking(true)
+                  setTimeout(() => {
+                    setIsShaking(false)
+                    handleViewChange('secret')
+                  }, 800)
+                }}
+              >
+                Press to shake
+              </button>
+            )}
+          </Paper>
+        ))
+      )}
     </div>
   )
 }
+
