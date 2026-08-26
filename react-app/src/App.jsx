@@ -2,6 +2,9 @@ import React, { useMemo, useRef, useEffect } from 'react'
 import Paper from './components/Paper.jsx'
 import SecretPage from './components/SecretPage.jsx'
 import LettersMatrix from './components/LettersMatrix.jsx'
+import LockPage from './components/LockPage.jsx'
+import UnlockedPage from './components/UnlockedPage.jsx'
+import BurningEffect from './components/BurningEffect.jsx'
 
 const pages = [
   {
@@ -77,7 +80,17 @@ export default function App() {
   const audioRef = useRef(null)
   const audioStartedRef = useRef(false)
   const [isShaking, setIsShaking] = React.useState(false)
-  const [currentView, setCurrentView] = React.useState('papers') // 'papers' | 'secret' | 'letters'
+  const [currentView, setCurrentView] = React.useState('papers') // 'papers' | 'secret' | 'letters' | 'lock' | 'unlocked'
+  const [showBurningTransition, setShowBurningTransition] = React.useState(false)
+
+  const handleUnlock = () => {
+    setCurrentView('unlocked')
+    setShowBurningTransition(true)
+  }
+
+  const handleBurningComplete = () => {
+    setShowBurningTransition(false)
+  }
 
   useEffect(() => {
     // Try to play audio automatically from 31 seconds
@@ -189,37 +202,43 @@ export default function App() {
       </audio>
 
       {/* Floating Navigation Menu */}
-      <nav className="floating-navbar" onPointerDown={(e) => e.stopPropagation()}>
-        <button 
-          className={`nav-item ${currentView === 'papers' ? 'active' : ''}`}
-          onClick={() => handleViewChange('papers')}
-          title="Draggable Notes"
-        >
-          <span className="nav-icon">📑</span>
-          <span className="nav-text">Memories</span>
-        </button>
-        <button 
-          className={`nav-item ${currentView === 'letters' ? 'active' : ''}`}
-          onClick={() => handleViewChange('letters')}
-          title="22 Love Letters"
-        >
-          <span className="nav-icon">✉️</span>
-          <span className="nav-text">Letters</span>
-        </button>
-        <button 
-          className={`nav-item ${currentView === 'secret' ? 'active' : ''}`}
-          onClick={() => handleViewChange('secret')}
-          title="Endless Garden"
-        >
-          <span className="nav-icon">💖</span>
-          <span className="nav-text">Garden</span>
-        </button>
-      </nav>
+      {currentView !== 'lock' && currentView !== 'unlocked' && (
+        <nav className="floating-navbar" onPointerDown={(e) => e.stopPropagation()}>
+          <button 
+            className={`nav-item ${currentView === 'papers' ? 'active' : ''}`}
+            onClick={() => handleViewChange('papers')}
+            title="Draggable Notes"
+          >
+            <span className="nav-icon">📑</span>
+            <span className="nav-text">Memories</span>
+          </button>
+          <button 
+            className={`nav-item ${currentView === 'letters' ? 'active' : ''}`}
+            onClick={() => handleViewChange('letters')}
+            title="22 Love Letters"
+          >
+            <span className="nav-icon">✉️</span>
+            <span className="nav-text">Letters</span>
+          </button>
+          <button 
+            className={`nav-item ${currentView === 'secret' ? 'active' : ''}`}
+            onClick={() => handleViewChange('secret')}
+            title="Endless Garden"
+          >
+            <span className="nav-icon">💖</span>
+            <span className="nav-text">Garden</span>
+          </button>
+        </nav>
+      )}
       
       {currentView === 'secret' ? (
-        <SecretPage onBack={() => handleViewChange('papers')} />
+        <SecretPage onBack={() => handleViewChange('papers')} onLockClick={() => handleViewChange('lock')} />
       ) : currentView === 'letters' ? (
         <LettersMatrix onLetterOpen={handleLetterOpen} onLetterClose={handleLetterClose} />
+      ) : currentView === 'lock' ? (
+        <LockPage onUnlock={handleUnlock} onBack={() => handleViewChange('secret')} />
+      ) : currentView === 'unlocked' ? (
+        <UnlockedPage onBack={() => handleViewChange('secret')} />
       ) : (
         pages.map((page, idx) => (
           <Paper
@@ -255,6 +274,10 @@ export default function App() {
             )}
           </Paper>
         ))
+      )}
+
+      {showBurningTransition && (
+        <BurningEffect onComplete={handleBurningComplete} />
       )}
     </div>
   )

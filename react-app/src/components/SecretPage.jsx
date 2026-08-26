@@ -4,7 +4,7 @@ import Fireworks from './Fireworks.jsx'
 import '../styles.css'
 import './SecretPage.css'
 
-export default function SecretPage({ onBack }) {
+export default function SecretPage({ onBack, onLockClick }) {
   return (
     <div className="secret-page">
       <PilingConfetti />
@@ -18,8 +18,8 @@ export default function SecretPage({ onBack }) {
       </div>
 
       {/* Revealing Text (Jug Fill) */}
-      <div className="reveal-text-container">
-        <div style={{ position: 'relative', display: 'inline-block' }}>
+      <div className="reveal-text-container" onClick={onLockClick} title="Click to unlock something special...">
+        <div className="clickable-reveal-text" style={{ position: 'relative', display: 'inline-block' }}>
           <h1 className="outline-text">
             To you i come home
           </h1>

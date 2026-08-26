@@ -1,0 +1,302 @@
+.lock-page-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at center, #1b0e35 0%, #0a0418 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  z-index: 150;
+  font-family: 'Short Stack', cursive;
+  user-select: none;
+}
+
+/* Background Ambient Glows */
+.bg-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+.bg-glow-1 {
+  width: 400px;
+  height: 400px;
+  background: #ad1457;
+  top: -100px;
+  left: -100px;
+  animation: floatGlow 15s ease-in-out infinite alternate;
+}
+
+.bg-glow-2 {
+  width: 350px;
+  height: 350px;
+  background: #7b1fa2;
+  bottom: -50px;
+  right: -50px;
+  animation: floatGlow 18s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes floatGlow {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, 30px) scale(1.15); }
+}
+
+/* Go Back Button */
+.back-btn {
+  position: absolute;
+  top: 25px;
+  left: 25px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 10px 18px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateX(-4px);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+/* Glassmorphic Lock Card */
+.lock-card {
+  background: rgba(15, 8, 32, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 24px;
+  padding: 40px 30px;
+  width: 320px;
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.4),
+    inset 0 0 25px rgba(255, 255, 255, 0.02);
+  transition: all 0.4s ease;
+}
+
+.lock-card.unlocked-glow {
+  box-shadow: 0 0 50px rgba(0, 230, 118, 0.3);
+  border-color: rgba(0, 230, 118, 0.4);
+}
+
+/* Padlock Drawing */
+.lock-icon-container {
+  margin-bottom: 20px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+}
+
+.padlock {
+  width: 44px;
+  height: 34px;
+  position: relative;
+  margin-top: 15px;
+}
+
+.padlock .body {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #ad1457 0%, #6a0b35 100%);
+  border-radius: 8px;
+  position: relative;
+  z-index: 2;
+  box-shadow: 
+    0 4px 10px rgba(0,0,0,0.3),
+    inset 0 2px 4px rgba(255,255,255,0.2);
+  transition: background 0.3s ease;
+}
+
+.padlock.denied .body {
+  background: linear-gradient(135deg, #d50000 0%, #9b0000 100%);
+  box-shadow: 0 0 15px rgba(213, 0, 0, 0.6);
+}
+
+.padlock.unlocked .body {
+  background: linear-gradient(135deg, #00e676 0%, #00a852 100%);
+  box-shadow: 0 0 20px rgba(0, 230, 118, 0.6);
+}
+
+.padlock .shackle {
+  width: 32px;
+  height: 28px;
+  border: 4px solid #ad1457;
+  border-bottom: none;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  position: absolute;
+  top: -20px;
+  left: 6px;
+  z-index: 1;
+  box-sizing: border-box;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s ease;
+}
+
+.padlock.denied .shackle {
+  border-color: #d50000;
+}
+
+.padlock.unlocked .shackle {
+  border-color: #00e676;
+  transform: translateY(-8px) rotateY(180deg);
+  transform-origin: left;
+}
+
+.padlock .keyhole {
+  width: 6px;
+  height: 10px;
+  background: #000;
+  border-radius: 3px;
+  position: absolute;
+  top: 12px;
+  left: 19px;
+}
+
+.padlock .keyhole::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  background: #000;
+  border-radius: 50%;
+  position: absolute;
+  top: -4px;
+  left: -2px;
+}
+
+/* Titles */
+.lock-title {
+  font-size: 1.4rem;
+  color: #fff;
+  margin: 5px 0 2px 0;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.lock-subtitle {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 25px;
+}
+
+/* Slots for entered PIN */
+.slots-container {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.slot-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: transparent;
+  font-size: 20px;
+  line-height: 0;
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.slot-dot.filled {
+  background: #ad1457;
+  border-color: #ff4081;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(173, 20, 87, 0.6);
+  transform: scale(1.15);
+}
+
+.slot-dot.error {
+  background: #d50000 !important;
+  border-color: #ff1744 !important;
+  box-shadow: 0 0 10px rgba(213, 0, 0, 0.6);
+}
+
+.slot-dot.success {
+  background: #00e676 !important;
+  border-color: #b9f6ca !important;
+  box-shadow: 0 0 15px rgba(0, 230, 118, 0.7);
+}
+
+/* Keypad Grid */
+.keypad-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  width: 100%;
+}
+
+.keypad-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 22px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease;
+  justify-self: center;
+}
+
+.keypad-btn:hover {
+  background: rgba(173, 20, 87, 0.15);
+  border-color: rgba(173, 20, 87, 0.4);
+  box-shadow: 0 0 12px rgba(173, 20, 87, 0.25);
+  transform: scale(1.08);
+}
+
+.keypad-btn:active {
+  transform: scale(0.92);
+  background: rgba(173, 20, 87, 0.3);
+  border-color: rgba(173, 20, 87, 0.6);
+}
+
+.keypad-btn.action-btn {
+  font-size: 16px;
+  background: rgba(255, 255, 255, 0.01);
+  border-color: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.keypad-btn.action-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.font-symbol {
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+}
+
+/* Shake Animation on Error */
+.shake-err {
+  animation: shake 0.6s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+  20%, 40%, 60%, 80% { transform: translateX(8px); }
+}
